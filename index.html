@@ -89,7 +89,6 @@
         button:hover { background: #0069e6; }
         button:active { background: #0051c8; transform: scale(0.97); }
 
-        /* BOTONES SECUNDARIOS */
         .btn-secundario {
             background: #e5e5ea;
             color: #007aff;
@@ -98,7 +97,6 @@
         .btn-secundario:hover { background: #d1d1d6; }
         .btn-secundario:active { background: #c7c7cc; }
 
-        /* Botón especial para ir al login desde el chat */
         .btn-ir-login {
             background: #34c759;
             color: white;
@@ -120,7 +118,6 @@
             font-weight: 600;
         }
 
-        /* DISEÑO PANTALLA LIBROS (HORIZONTAL) */
         #pantalla3.container { padding: 45px; }
         #pantalla3 .contenido-libro {
             display: flex;
@@ -176,7 +173,6 @@
             width: 100%;
         }
 
-        /* SECCIÓN CHAT */
         .chat-body {
             flex: 1;
             overflow-y: auto;
@@ -219,7 +215,6 @@
             display: block;
         }
 
-        /* SECCIÓN CONFIGURACIÓN API KEY */
         .api-config-box {
             background: #f2f2f7;
             padding: 15px;
@@ -244,7 +239,6 @@
             font-size: 16px;
         }
 
-        /* SECCIÓN RESULTADOS (IVA Y FACTURA) */
         .resultado {
             margin-top: 25px;
             font-weight: 600;
@@ -257,7 +251,6 @@
             line-height: 1.5;
         }
 
-        /* ESTILOS DE DISEÑO FEL GUATEMALA (Flexbox compatible con PDF) */
         .factura-fel {
             background: #ffffff !important;
             border: 1px solid #c7c7cc;
@@ -304,7 +297,6 @@
             line-height: 1.6;
         }
 
-        /* RESPONSIVIDAD */
         @media (max-width: 850px) {
             .container, #pantalla3.container { max-width: 95%; padding: 30px 20px; }
             h1, h2 { font-size: 30px; margin-bottom: 20px; }
@@ -322,7 +314,6 @@
         }
     </style>
 </head>
-    <meta name="google-site-verification" content="9gcH6PvtmDXWhT5QblkT-q_85OHZPphA-4E-MqXurNE" />
 <body>
 
     <div id="panelChat" class="container" style="display:block;">
@@ -330,7 +321,6 @@
         
         <button class="btn-ir-login" onclick="irAPantalla('pantalla1')">🔐 Acceder al Sistema SRC (Login)</button>
 
-        <!-- CONFIGURACIÓN DE API KEY EN LA PANTALLA -->
         <div class="api-config-box">
             <label for="apiKeyInput">🔑 Configurar OpenAI API Key:</label>
             <input type="password" id="apiKeyInput" placeholder="sk-proj-..." />
@@ -338,7 +328,7 @@
         </div>
 
         <div class="chat-body" id="chatBody">
-            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b> para enviar.</div>
+            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu nueva API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
         </div>
         <div class="chat-input-wrapper">
             <input type="text" id="mensaje" placeholder="Escribe aquí tu consulta y presiona Enter..." onkeypress="evaluarTecla(event)">
@@ -447,7 +437,6 @@
         const usuarioCorrecto = 'admin';
         const contrasenaCorrecta = '12345';
 
-        // CARGAR CLAVE GUARDADA AL INICIAR
         window.addEventListener('DOMContentLoaded', () => {
             const claveGuardada = localStorage.getItem('openai_api_key');
             if (claveGuardada) {
@@ -457,11 +446,11 @@
 
         function guardarApiKey() {
             const clave = document.getElementById('apiKeyInput').value.trim();
-            if (clave) {
+            if (clave.startsWith('sk-')) {
                 localStorage.setItem('openai_api_key', clave);
-                alert('¡API Key guardada con éxito en tu navegador!');
+                alert('¡API Key guardada correctamente en el navegador!');
             } else {
-                alert('Por favor ingresa una clave válida.');
+                alert('Por favor ingresa una API Key válida de OpenAI (debe comenzar con "sk-").');
             }
         }
 
@@ -527,7 +516,7 @@
             }
         });
 
-        // Buscador de Libros Contables
+        // Libros Contables
         document.getElementById('form-menu2').addEventListener('submit', e => {
             e.preventDefault();
             const tipo = document.getElementById('tipo-declaracion').value;
@@ -565,7 +554,7 @@
             irAPantalla('pantalla3');
         });
 
-        // --- LÓGICA CHAT GPT ---
+        // Chat con OpenAI
         function evaluarTecla(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -580,11 +569,10 @@
 
             if (textoMensaje === "") return;
 
-            // OBTENER LA CLAVE DEL LOCALSTORAGE
             const apiKey = localStorage.getItem('openai_api_key');
 
             if (!apiKey) {
-                alert("Por favor, ingresa y guarda tu API Key arriba antes de hacer preguntas.");
+                alert("Por favor, ingresa y guarda tu API Key arriba antes de consultar a la IA.");
                 return;
             }
 
@@ -620,19 +608,20 @@
 
                 const datos = await respuesta.json();
 
-                if (datos.choices && datos.choices[0]) {
+                if (respuesta.ok && datos.choices && datos.choices[0]) {
                     divPensando.innerHTML = `<b>SRC:</b> ${datos.choices[0].message.content.replace(/\n/g, '<br>')}`;
                 } else {
-                    divPensando.innerHTML = `<b>SRC:</b> Error en la respuesta del servidor de IA. Revisa si tu API Key es válida.`;
+                    const mensajeError = datos.error ? datos.error.message : 'Error desconocido en el servidor de OpenAI.';
+                    divPensando.innerHTML = `<b>SRC Error:</b> ${mensajeError}`;
                 }
             } catch (error) {
                 console.error(error);
-                divPensando.innerHTML = `<b>SRC:</b> Hubo un problema al conectar con la IA. Verifica tu conexión.`;
+                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API de OpenAI. Revisa tu conexión a internet.`;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
         }
 
-        // --- LÓGICA DE HERRAMIENTAS ---
+        // Calculadora IVA
         function calcularIVA() {
             const monto = parseFloat(document.getElementById('montoIVA').value);
             const res = document.getElementById('resultadoIVA');
@@ -645,6 +634,7 @@
             res.innerHTML = `Valor sin IVA: ${monedaActual}${base.toFixed(2)}<br>Monto del IVA (12%): ${monedaActual}${iva.toFixed(2)}`;
         }
 
+        // Facturación FEL
         function generarFactura() {
             const nombre = document.getElementById('facNombre').value;
             const nit = document.getElementById('facNit').value;
@@ -664,7 +654,7 @@
             res.innerHTML = `
                 <div class="factura-fel" id="factura-descargable">
                     <div class="fel-header">
-                        <h3>DOCUMENTO TRIBUTARIO ELECTRÓNIONICO</h3>
+                        <h3>DOCUMENTO TRIBUTARIO ELECTRÓNICO</h3>
                         <p><strong>FACTURA ELECTRÓNICA (FEL)</strong></p>
                         <p>SISTEMA DE REGISTROS CONTABLES S.A.</p>
                         <p>NIT Emisor: 99887766-5</p>

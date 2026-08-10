@@ -328,7 +328,7 @@
         </div>
 
         <div class="chat-body" id="chatBody">
-            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu nueva API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
+            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
         </div>
         <div class="chat-input-wrapper">
             <input type="text" id="mensaje" placeholder="Escribe aquí tu consulta y presiona Enter..." onkeypress="evaluarTecla(event)">
@@ -554,7 +554,7 @@
             irAPantalla('pantalla3');
         });
 
-        // Chat con OpenAI
+        // Chat con OpenAI corregido
         function evaluarTecla(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -611,12 +611,12 @@
                 if (respuesta.ok && datos.choices && datos.choices[0]) {
                     divPensando.innerHTML = `<b>SRC:</b> ${datos.choices[0].message.content.replace(/\n/g, '<br>')}`;
                 } else {
-                    const mensajeError = datos.error ? datos.error.message : 'Error desconocido en el servidor de OpenAI.';
+                    const mensajeError = datos.error ? `${datos.error.type || 'Error'}: ${datos.error.message}` : 'Error desconocido en OpenAI.';
                     divPensando.innerHTML = `<b>SRC Error:</b> ${mensajeError}`;
                 }
             } catch (error) {
-                console.error(error);
-                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API de OpenAI. Revisa tu conexión a internet.`;
+                console.error("Error en la petición:", error);
+                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API (${error.message}). Revisa la consola del navegador.`;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
         }

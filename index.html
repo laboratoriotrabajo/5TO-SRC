@@ -322,13 +322,13 @@
         <button class="btn-ir-login" onclick="irAPantalla('pantalla1')">🔐 Acceder al Sistema SRC (Login)</button>
 
         <div class="api-config-box">
-            <label for="apiKeyInput">🔑 Configurar OpenAI API Key:</label>
-            <input type="password" id="apiKeyInput" placeholder="sk-proj-..." />
+            <label for="apiKeyInput">🔑 Configurar Groq API Key (gsk_...):</label>
+            <input type="password" id="apiKeyInput" placeholder="gsk_..." />
             <button onclick="guardarApiKey()">Guardar Clave</button>
         </div>
 
         <div class="chat-body" id="chatBody">
-            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
+            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key de Groq arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
         </div>
         <div class="chat-input-wrapper">
             <input type="text" id="mensaje" placeholder="Escribe aquí tu consulta y presiona Enter..." onkeypress="evaluarTecla(event)">
@@ -438,7 +438,7 @@
         const contrasenaCorrecta = '12345';
 
         window.addEventListener('DOMContentLoaded', () => {
-            const claveGuardada = localStorage.getItem('openai_api_key');
+            const claveGuardada = localStorage.getItem('groq_api_key');
             if (claveGuardada) {
                 document.getElementById('apiKeyInput').value = claveGuardada;
             }
@@ -446,11 +446,11 @@
 
         function guardarApiKey() {
             const clave = document.getElementById('apiKeyInput').value.trim();
-            if (clave.startsWith('sk-')) {
-                localStorage.setItem('openai_api_key', clave);
-                alert('¡API Key guardada correctamente en el navegador!');
+            if (clave.startsWith('gsk_')) {
+                localStorage.setItem('groq_api_key', clave);
+                alert('¡API Key guardada correctamente!');
             } else {
-                alert('Por favor ingresa una API Key válida de OpenAI (debe comenzar con "sk-").');
+                alert('Ingresa una API Key válida de Groq (debe empezar con "gsk_").');
             }
         }
 
@@ -554,7 +554,7 @@
             irAPantalla('pantalla3');
         });
 
-        // Chat con OpenAI corregido
+        // Chat con Groq API
         function evaluarTecla(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -569,10 +569,10 @@
 
             if (textoMensaje === "") return;
 
-            const apiKey = localStorage.getItem('openai_api_key');
+            const apiKey = localStorage.getItem('groq_api_key');
 
             if (!apiKey) {
-                alert("Por favor, ingresa y guarda tu API Key arriba antes de consultar a la IA.");
+                alert("Por favor, ingresa y guarda tu API Key de Groq arriba antes de consultar.");
                 return;
             }
 
@@ -591,14 +591,14 @@
             chatBody.scrollTop = chatBody.scrollHeight;
 
             try {
-                const respuesta = await fetch("https://api.openai.com/v1/chat/completions", {
+                const respuesta = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: "gpt-4o-mini",
+                        model: "llama-3.3-70b-versatile",
                         messages: [
                             { role: "system", content: "Eres un asistente experto en contabilidad integrado en el sistema SRC de Guatemala." },
                             { role: "user", content: textoMensaje }
@@ -611,12 +611,12 @@
                 if (respuesta.ok && datos.choices && datos.choices[0]) {
                     divPensando.innerHTML = `<b>SRC:</b> ${datos.choices[0].message.content.replace(/\n/g, '<br>')}`;
                 } else {
-                    const mensajeError = datos.error ? `${datos.error.type || 'Error'}: ${datos.error.message}` : 'Error desconocido en OpenAI.';
+                    const mensajeError = datos.error ? `${datos.error.type || 'Error'}: ${datos.error.message}` : 'Error desconocido.';
                     divPensando.innerHTML = `<b>SRC Error:</b> ${mensajeError}`;
                 }
             } catch (error) {
                 console.error("Error en la petición:", error);
-                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API (${error.message}). Revisa la consola del navegador.`;
+                divPensando.innerHTML = `<b>SRC Error:</b> No se pudo conectar con la API (${error.message}).`;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
         }

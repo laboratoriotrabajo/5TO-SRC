@@ -95,14 +95,12 @@
             margin-top: 15px;
         }
         .btn-secundario:hover { background: #d1d1d6; }
-        .btn-secundario:active { background: #c7c7cc; }
 
         .btn-ir-login {
             background: #34c759;
             color: white;
             margin-bottom: 25px;
         }
-        .btn-ir-login:hover { background: #28a745; }
 
         .back-button {
             font-size: 26px;
@@ -113,64 +111,7 @@
             display: block;
             text-align: left;
             user-select: none;
-            transition: color 0.2s;
-            width: auto;
             font-weight: 600;
-        }
-
-        #pantalla3.container { padding: 45px; }
-        #pantalla3 .contenido-libro {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 60px;
-            margin-top: 25px;
-            flex-wrap: nowrap;
-        }
-
-        #pantalla3 .contenido-libro img {
-            max-width: 480px;
-            width: 100%;
-            border-radius: 12px;
-            height: auto;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .extra-image-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            flex-shrink: 0;
-            width: 250px;
-            padding-top: 20px;
-        }
-
-        #imagen-extra {
-            display: block;
-            max-width: 220px;
-            height: auto;
-            margin: 0 auto;
-            border-radius: 8px;
-        }
-
-        #pantalla3 .contenido-libro a {
-            color: var(--primary);
-            text-decoration: underline;
-            display: block;
-            margin-top: 20px;
-            font-size: 24px;
-        }
-
-        #mensaje-no-archivo {
-            display: none;
-            margin-top: 50px;
-            font-size: 28px;
-            font-weight: 600;
-            color: #555;
-            text-align: center;
-            width: 100%;
         }
 
         .chat-body {
@@ -208,11 +149,18 @@
             border-bottom-left-radius: 4px;
         }
 
-        .chat-input-wrapper span {
-            font-size: 14px;
-            color: #8e8e93;
-            margin-top: 8px;
-            display: block;
+        .chat-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-wrapper input {
+            flex: 1;
+        }
+
+        .chat-input-wrapper button {
+            width: 140px;
+            font-size: 20px;
         }
 
         .api-config-box {
@@ -239,78 +187,11 @@
             font-size: 16px;
         }
 
-        .resultado {
-            margin-top: 25px;
-            font-weight: 600;
-            color: #1c1c1e;
-            background: #f2f2f7;
-            padding: 20px;
-            border-left: 6px solid var(--primary);
-            border-radius: 8px;
-            font-size: 20px;
-            line-height: 1.5;
-        }
-
-        .factura-fel {
-            background: #ffffff !important;
-            border: 1px solid #c7c7cc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            color: #333;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-        .fel-header {
-            text-align: center;
-            border-bottom: 2px solid #007aff;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        .fel-header h3 { margin: 0; color: #007aff; font-size: 20px; }
-        .fel-header p { margin: 2px 0; font-size: 12px; color: #666; }
-        
-        .fel-datos {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-        .fel-datos > div {
-            width: 48%;
-        }
-        
-        .fel-tabla {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-        .fel-tabla th, .fel-tabla td {
-            border: 1px solid #e5e5ea;
-            padding: 8px;
-            text-align: left;
-        }
-        .fel-tabla th { background-color: #f2f2f7; }
-        .fel-totales {
-            text-align: right;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
         @media (max-width: 850px) {
-            .container, #pantalla3.container { max-width: 95%; padding: 30px 20px; }
-            h1, h2 { font-size: 30px; margin-bottom: 20px; }
-            label { font-size: 16px; margin-bottom: 6px; }
+            .container { max-width: 95%; padding: 30px 20px; }
+            h2 { font-size: 30px; }
             input, select, button { padding: 12px 15px; font-size: 16px; }
-            .back-button { font-size: 20px; margin-top: 20px; }
-            #pantalla3 .contenido-libro { flex-direction: column; align-items: center; gap: 15px; }
-            #pantalla3 .contenido-libro img { max-width: 350px; }
-            .extra-image-section { width: 100%; padding-top: 0; }
-            #imagen-extra { max-width: 150px; }
-            #pantalla3 .contenido-libro a { font-size: 16px; margin-top: 8px; }
-            #mensaje-no-archivo { font-size: 20px; margin-top: 25px; }
-            .mensaje { font-size: 15px; }
-            .resultado { font-size: 16px; }
+            .chat-input-wrapper button { width: 100px; font-size: 16px; }
         }
     </style>
 </head>
@@ -322,17 +203,18 @@
         <button class="btn-ir-login" onclick="irAPantalla('pantalla1')">🔐 Acceder al Sistema SRC (Login)</button>
 
         <div class="api-config-box">
-            <label for="apiKeyInput">🔑 Configurar Groq API Key (gsk_...):</label>
-            <input type="password" id="apiKeyInput" placeholder="gsk_..." />
-            <button onclick="guardarApiKey()">Guardar Clave</button>
+            <label for="apiKeyInput">🔑 Configurar OpenAI / Groq API Key:</label>
+            <input type="password" id="apiKeyInput" placeholder="Pega tu nueva clave aquí (sk-... o gsk_...)" />
+            <button type="button" onclick="guardarApiKey()">Guardar Clave</button>
         </div>
 
         <div class="chat-body" id="chatBody">
-            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key de Groq arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
+            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu nueva API Key en el cuadro superior, haz clic en <b>Guardar Clave</b> y realiza tu consulta contable.</div>
         </div>
+        
         <div class="chat-input-wrapper">
-            <input type="text" id="mensaje" placeholder="Escribe aquí tu consulta y presiona Enter..." onkeypress="evaluarTecla(event)">
-            <span>* Presiona la tecla Enter en tu teclado para enviar el mensaje.</span>
+            <input type="text" id="mensaje" placeholder="Escribe tu consulta aquí..." onkeydown="evaluarTecla(event)">
+            <button type="button" onclick="enviarMensaje()">Enviar</button>
         </div>
     </div>
 
@@ -348,97 +230,16 @@
 
     <div id="pantalla2" class="container">
         <h2>SR Contable</h2>
-        
-        <div class="form-group">
-            <label for="tipo-moneda">Tipo de Moneda Global</label>
-            <select id="tipo-moneda" onchange="actualizarSimboloMoneda()">
-                <option value="Q">Quetzales (Q)</option>
-                <option value="$">Dólares ($)</option>
-            </select>
-        </div>
-
-        <form id="form-menu2">
-            <div class="form-group"><label for="tipo-declaracion">Tipo de libros</label>
-                <select id="tipo-declaracion">
-                    <option value="inventario">Inventario</option>
-                    <option value="aux-caja">Aux. Caja</option>
-                    <option value="aux-banco">Aux. Banco</option>
-                    <option value="aperturas">Aperturas</option>
-                </select>
-            </div>
-            <div class="form-group"><label for="meses">Mes</label>
-                <select id="meses">
-                    <option value="enero">Enero</option><option value="febrero">Febrero</option><option value="marzo">Marzo</option><option value="abril">Abril</option><option value="mayo">Mayo</option><option value="junio">Junio</option><option value="julio">Julio</option><option value="agosto">Agosto</option><option value="septiembre">Septiembre</option><option value="octubre">Octubre</option><option value="noviembre">Noviembre</option><option value="diciembre">Diciembre</option>
-                </select>
-            </div>
-            <div class="form-group"><label for="años">Año</label>
-                <select id="años"><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option></select>
-            </div>
-            <button type="submit">Ver Libro Contable</button>
-        </form>
-        
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #d1d1d6;">
-        
-        <button class="btn-secundario" onclick="irAPantalla('panelCalculadora')">🧮 Calculadora de IVA</button>
-        <button class="btn-secundario" onclick="irAPantalla('panelFacturacion')">🧾 Generar Factura</button>
         <button class="btn-secundario" style="background:#ff3b30; color:white;" onclick="irAPantalla('panelChat')">🔴 Cerrar Sesión y salir al Chat</button>
-    </div>
-
-    <div id="pantalla3" class="container">
-        <h2 id="titulo-libro">Libro Contable</h2>
-        <div class="contenido-libro">
-            <img id="imagen-libro" src="" alt="Descripción de la imagen">
-            <div class="extra-image-section">
-                <img id="imagen-extra" src="" alt="Imagen Extra">
-                <a id="enlace-libro" href="#" target="_blank">Ver documento relacionado</a>
-            </div>
-            <p id="mensaje-no-archivo">Aún no se han agregado archivos al programa</p>
-        </div>
-        <div class="back-button" onclick="regresarAlMenu()">← Volver al Menú Principal</div>
-    </div>
-
-    <div id="panelCalculadora" class="container">
-        <h2>Calculadora IVA (12%)</h2>
-        <div class="form-group">
-            <label id="lblMontoIVA" for="montoIVA">Monto Total (Con IVA incluido)</label>
-            <input type="number" id="montoIVA" placeholder="Ingrese monto total">
-        </div>
-        <button onclick="calcularIVA()">Calcular</button>
-        <div id="resultadoIVA" class="resultado" style="display:none;"></div>
-        <div class="back-button" onclick="regresarAlMenu()">← Volver al Menú Principal</div>
-    </div>
-
-    <div id="panelFacturacion" class="container">
-        <h2>Nueva Factura</h2>
-        <div class="form-group">
-            <label for="facNombre">Nombre del Cliente</label>
-            <input type="text" id="facNombre" placeholder="Ej. Juan Pérez">
-        </div>
-        <div class="form-group">
-            <label for="facNit">NIT o Documento</label>
-            <input type="text" id="facNit" placeholder="Ej. 1234567-8 o CF">
-        </div>
-        <div class="form-group">
-            <label for="facDetalle">Detalle del Servicio/Producto</label>
-            <input type="text" id="facDetalle" placeholder="Ej. Servicios Contables">
-        </div>
-        <div class="form-group">
-            <label id="lblFacMonto" for="facMonto">Monto Total Factura</label>
-            <input type="number" id="facMonto" placeholder="Monto total">
-        </div>
-        <button onclick="generarFactura()">Generar Factura</button>
-        
-        <div id="resultadoFactura" style="display:none;"></div>
-        
-        <div class="back-button" onclick="regresarAlMenu()">← Volver al Menú Principal</div>
     </div>
 
     <script>
         const usuarioCorrecto = 'admin';
         const contrasenaCorrecta = '12345';
 
+        // Cargar clave guardada al iniciar
         window.addEventListener('DOMContentLoaded', () => {
-            const claveGuardada = localStorage.getItem('groq_api_key');
+            const claveGuardada = localStorage.getItem('user_api_key');
             if (claveGuardada) {
                 document.getElementById('apiKeyInput').value = claveGuardada;
             }
@@ -446,65 +247,23 @@
 
         function guardarApiKey() {
             const clave = document.getElementById('apiKeyInput').value.trim();
-            if (clave.startsWith('gsk_')) {
-                localStorage.setItem('groq_api_key', clave);
-                alert('¡API Key guardada correctamente!');
+            if (clave.length > 5) {
+                localStorage.setItem('user_api_key', clave);
+                alert('¡API Key guardada con éxito en tu navegador!');
             } else {
-                alert('Ingresa una API Key válida de Groq (debe empezar con "gsk_").');
+                alert('Por favor, ingresa una API Key válida.');
             }
         }
 
-        let monedaActual = 'Q';
-
-        const nombresTipo = {
-            'inventario': 'Inventario',
-            'aux-caja': 'Aux. Caja',
-            'aux-banco': 'Aux. Banco',
-            'aperturas': 'Aperturas'
-        };
-
-        const capitalizar = txt => txt.charAt(0).toUpperCase() + txt.slice(1);
-
-        const combinaciones = {
-            'inventario-junio-2020': { img: 'contabilidad1.png', link: 'https://docs.google.com/spreadsheets/d/1RtWvGrQlld24awQ6vyiQyXkouZ8Z2uLtdImRy8FiVGI/edit?usp=sharing', extra_img: 'QR1.png' },
-            'inventario-abril-2025': { img: 'contabilidad2.png', link: 'https://docs.google.com/spreadsheets/d/1BmpALeAs417S2xlzfLttDaQeWv0icGnEfkJz7Q621do/edit?usp=sharing', extra_img: 'QR2.png' },
-            'inventario-enero-2022': { img: 'contabilidad3.png', link: 'https://docs.google.com/spreadsheets/d/1olbUltdBpWtTQcV0Gc8eaB-uToSLBCL8_KikajZDSeo/edit?usp=sharing', extra_img: 'QR3.png' },
-            'inventario-marzo-2025': { img: 'contabilidad4.png', link: 'https://docs.google.com/spreadsheets/d/1IqUFh1BSjKnfZ_UZAmHkvcpF3GtaT_zES9pJiIF9FfA/edit?usp=sharing', extra_img: 'QR4.png' },
-            'aperturas-enero-2025': { img: 'apertura1.png', link: 'https://docs.google.com/spreadsheets/d/1yXJRda6sU4_uuUMW-hmqgxvxozXi4XQnb3VcvVU4xfM/edit?usp=sharing', extra_img: 'QR5.png' },
-            'aperturas-febrero-2025': { img: 'apertura2.png', link: 'https://docs.google.com/spreadsheets/d/1eXGvJPvUDplw0SZgiPUMwLhT8i_8lFwyFAeb6tjq0lM/edit?usp=sharing', extra_img: 'QR6.png' },
-            'aperturas-abril-2025': { img: 'apertura4.png', link: 'https://docs.google.com/spreadsheets/d/1pfzC7epK8PFfwVoIwyqT8rA9e7oDM8paGCucSYLRzmM/edit?usp=sharing', extra_img: 'QR7.png' },
-            'aperturas-mayo-2025': { img: 'apertura5.png', link: 'https://docs.google.com/spreadsheets/d/1HfmUWU-xG1lHXEjo9Kmb8rgBEjNK_IVusUiRvt2gWRs/edit?usp=sharin', extra_img: 'QR8.png' },
-            'aperturas-junio-2025': { img: 'apertura6.png', link: 'https://docs.google.com/spreadsheets/d/14wFwM2pIfCzQeNgttTKW67rDSIqcql9K_v1oJa1qXj0/edit?usp=sharing', extra_img: 'QR9.png' },
-            'aperturas-julio-2025': { img: 'apertura7.png', link: 'https://docs.google.com/spreadsheets/d/1cg-z_wmCO7qCVZBhiayq-qOGOsujPiTnZJEQId_T11E/edit?usp=sharing', extra_img: 'QR10.png' },
-            'aperturas-agosto-2025': { img: 'apertura8.png', link: 'https://docs.google.com/spreadsheets/d/1zyi-LfpyHiyl_cifdlGrCYdvQZQYBKx-a0kmXLg6thA/edit?usp=sharing', extra_img: 'QR11.png' },
-            'aperturas-septiembre-2025': { img: 'apertura9.png', link: 'https://docs.google.com/spreadsheets/d/1lmi1hXuX15H_avXi4y4JUDLxh9oYtL8Hg7Z4Pom3DFs/edit?usp=sharing', extra_img: 'QR12.png' },
-            'inventario-diciembre-2025': { img: 'inventario12.png', link: 'https://docs.google.com/spreadsheets/d/18RXPU94zy63zH4KMHYhfr_-8KzZnIzSQAz-0eGyv0HM/edit?usp=sharing', extra_img: 'QR13.png' }
-        };
-
-        const pantallas = ['pantalla1', 'pantalla2', 'pantalla3', 'panelChat', 'panelCalculadora', 'panelFacturacion'];
+        const pantallas = ['pantalla1', 'pantalla2', 'panelChat'];
 
         function irAPantalla(idPantallaDestino) {
             pantallas.forEach(id => {
-                document.getElementById(id).style.display = (id === idPantallaDestino) ? 'block' : 'none';
+                const el = document.getElementById(id);
+                if (el) el.style.display = (id === idPantallaDestino) ? 'block' : 'none';
             });
         }
 
-        function regresarAlMenu() {
-            irAPantalla('pantalla2');
-        }
-
-        function actualizarSimboloMoneda() {
-            monedaActual = document.getElementById('tipo-moneda').value;
-            const textoMoneda = monedaActual === 'Q' ? 'Quetzales' : 'Dólares';
-            document.getElementById('lblMontoIVA').textContent = `Monto Total (Con IVA incluido en ${textoMoneda})`;
-            document.getElementById('lblFacMonto').textContent = `Monto Total Factura (en ${textoMoneda})`;
-            document.getElementById('montoIVA').placeholder = `Ingrese monto en ${textoMoneda}`;
-            document.getElementById('facMonto').placeholder = `Monto total en ${textoMoneda}`;
-            
-            if(document.getElementById('resultadoIVA').style.display === 'block') calcularIVA();
-        }
-
-        // Login
         document.getElementById('form-login').addEventListener('submit', e => {
             e.preventDefault();
             const u = document.getElementById('usuario').value.trim();
@@ -516,45 +275,6 @@
             }
         });
 
-        // Libros Contables
-        document.getElementById('form-menu2').addEventListener('submit', e => {
-            e.preventDefault();
-            const tipo = document.getElementById('tipo-declaracion').value;
-            const mes = document.getElementById('meses').value;
-            const año = document.getElementById('años').value;
-
-            const clave = `${tipo}-${mes}-${año}`;
-            const datos = combinaciones[clave];
-
-            document.getElementById('titulo-libro').textContent = `${nombresTipo[tipo] || tipo} · ${capitalizar(mes)} ${año}`;
-
-            const mensaje = document.getElementById('mensaje-no-archivo');
-            const imagen = document.getElementById('imagen-libro');
-            const enlace = document.getElementById('enlace-libro');
-            const imagenExtra = document.getElementById('imagen-extra');
-            const extraImageSection = document.querySelector('.extra-image-section');
-
-            if (datos) {
-                imagen.src = datos.img;
-                imagen.style.display = 'block';
-                enlace.href = datos.link;
-                enlace.style.display = 'block';
-                imagenExtra.src = datos.extra_img;
-                imagenExtra.style.display = 'block';
-                extraImageSection.style.display = 'flex';
-                mensaje.style.display = 'none';
-            } else {
-                imagen.style.display = 'none';
-                enlace.style.display = 'none';
-                imagenExtra.style.display = 'none';
-                extraImageSection.style.display = 'none';
-                mensaje.style.display = 'block';
-            }
-
-            irAPantalla('pantalla3');
-        });
-
-        // Chat con Groq API
         function evaluarTecla(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -569,13 +289,22 @@
 
             if (textoMensaje === "") return;
 
-            const apiKey = localStorage.getItem('groq_api_key');
+            const apiKey = localStorage.getItem('user_api_key') || document.getElementById('apiKeyInput').value.trim();
 
             if (!apiKey) {
-                alert("Por favor, ingresa y guarda tu API Key de Groq arriba antes de consultar.");
+                alert("Por favor, ingresa tu API Key en la casilla superior y presiona 'Guardar Clave' antes de enviar.");
                 return;
             }
 
+            // Detecta si la clave es de Groq (empieza con gsk_) o de OpenAI (sk-)
+            const esGroq = apiKey.startsWith("gsk_");
+            const endpoint = esGroq 
+                ? "https://api.groq.com/openai/v1/chat/completions" 
+                : "https://api.openai.com/v1/chat/completions";
+            
+            const modelo = esGroq ? "llama-3.3-70b-versatile" : "gpt-3.5-turbo";
+
+            // Insertar mensaje del usuario en pantalla
             const divUsuario = document.createElement('div');
             divUsuario.className = 'mensaje usuario';
             divUsuario.innerHTML = `<b>Tú:</b> ${textoMensaje}`;
@@ -584,23 +313,24 @@
             inputMensaje.value = "";
             chatBody.scrollTop = chatBody.scrollHeight;
 
+            // Mensaje de carga
             const divPensando = document.createElement('div');
             divPensando.className = 'mensaje sistema';
-            divPensando.innerHTML = `<b>SRC:</b> <i>Pensando...</i>`;
+            divPensando.innerHTML = `<b>SRC:</b> <i>Procesando tu consulta...</i>`;
             chatBody.appendChild(divPensando);
             chatBody.scrollTop = chatBody.scrollHeight;
 
             try {
-                const respuesta = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                const respuesta = await fetch(endpoint, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
+                        model: modelo,
                         messages: [
-                            { role: "system", content: "Eres un asistente experto en contabilidad integrado en el sistema SRC de Guatemala." },
+                            { role: "system", content: "Eres un asistente experto en contabilidad integrado en el sistema SRC." },
                             { role: "user", content: textoMensaje }
                         ]
                     })
@@ -611,110 +341,14 @@
                 if (respuesta.ok && datos.choices && datos.choices[0]) {
                     divPensando.innerHTML = `<b>SRC:</b> ${datos.choices[0].message.content.replace(/\n/g, '<br>')}`;
                 } else {
-                    const mensajeError = datos.error ? `${datos.error.type || 'Error'}: ${datos.error.message}` : 'Error desconocido.';
+                    const mensajeError = datos.error ? datos.error.message : 'Error al consultar la API.';
                     divPensando.innerHTML = `<b>SRC Error:</b> ${mensajeError}`;
                 }
             } catch (error) {
-                console.error("Error en la petición:", error);
-                divPensando.innerHTML = `<b>SRC Error:</b> No se pudo conectar con la API (${error.message}).`;
+                console.error("Error:", error);
+                divPensando.innerHTML = `<b>SRC Error:</b> No se pudo establecer conexión (${error.message}).`;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
-        }
-
-        // Calculadora IVA
-        function calcularIVA() {
-            const monto = parseFloat(document.getElementById('montoIVA').value);
-            const res = document.getElementById('resultadoIVA');
-            if(!monto) { res.style.display = 'none'; return; }
-            
-            const base = monto / 1.12;
-            const iva = monto - base;
-            
-            res.style.display = 'block';
-            res.innerHTML = `Valor sin IVA: ${monedaActual}${base.toFixed(2)}<br>Monto del IVA (12%): ${monedaActual}${iva.toFixed(2)}`;
-        }
-
-        // Facturación FEL
-        function generarFactura() {
-            const nombre = document.getElementById('facNombre').value;
-            const nit = document.getElementById('facNit').value;
-            const detalle = document.getElementById('facDetalle').value;
-            const montoTotal = parseFloat(document.getElementById('facMonto').value);
-            const res = document.getElementById('resultadoFactura');
-            
-            if(!nombre || !montoTotal) return;
-            
-            const base = montoTotal / 1.12;
-            const iva = montoTotal - base;
-            
-            const uuidFel = 'E4D8A2C9-4C5F-4211-9A8B-' + Math.floor(100000000000 + Math.random() * 900000000000);
-            const fechaActual = new Date().toLocaleDateString('es-GT') + ' ' + new Date().toLocaleTimeString('es-GT');
-
-            res.style.display = 'block';
-            res.innerHTML = `
-                <div class="factura-fel" id="factura-descargable">
-                    <div class="fel-header">
-                        <h3>DOCUMENTO TRIBUTARIO ELECTRÓNICO</h3>
-                        <p><strong>FACTURA ELECTRÓNICA (FEL)</strong></p>
-                        <p>SISTEMA DE REGISTROS CONTABLES S.A.</p>
-                        <p>NIT Emisor: 99887766-5</p>
-                        <p style="font-size: 11px; margin-top:5px; color:#000;">Número de Autorización / UUID:<br><strong>${uuidFel}</strong></p>
-                    </div>
-                    <div class="fel-datos">
-                        <div>
-                            <strong>Fecha de Emisión:</strong><br>${fechaActual}<br><br>
-                            <strong>Moneda:</strong><br>${monedaActual === 'Q' ? 'GTQ - Quetzales' : 'USD - Dólares'}
-                        </div>
-                        <div>
-                            <strong>Cliente:</strong><br>${nombre}<br><br>
-                            <strong>NIT / Identificación:</strong><br>${nit || 'C/F'}
-                        </div>
-                    </div>
-                    <table class="fel-tabla">
-                        <thead>
-                            <tr>
-                                <th>Descripción del producto o servicio</th>
-                                <th style="text-align: right;">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>${detalle || 'Por servicios contables'}</td>
-                                <td style="text-align: right;">${monedaActual}${montoTotal.toFixed(2)}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="fel-totales">
-                        <p>Monto Neto (Sin IVA): ${monedaActual}${base.toFixed(2)}</p>
-                        <p>IVA Calculado (12%): ${monedaActual}${iva.toFixed(2)}</p>
-                        <p style="font-size: 18px; color: #007aff;"><strong>TOTAL A PAGAR: ${monedaActual}${montoTotal.toFixed(2)}</strong></p>
-                    </div>
-                    <p style="font-size: 10px; color:#8e8e93; text-align:center; margin-top: 15px;">Certificador Interno: SRC-Certificaciones. Sujeto a pagos trimestrales ISR.</p>
-                </div>
-                <button class="btn-secundario" style="background:#34c759; color:white; width:100%; margin-top: 15px;" onclick="descargarPDF()">📥 Descargar Factura FEL (PDF)</button>
-            `;
-        }
-
-        function descargarPDF() {
-            const elemento = document.getElementById('factura-descargable');
-            
-            elemento.style.backgroundColor = '#ffffff';
-            elemento.style.color = '#333333';
-
-            const opciones = {
-                margin:       10,
-                filename:     `Factura_FEL_${Date.now()}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#ffffff'
-                },
-                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-            };
-            
-            html2pdf().from(elemento).set(opciones).toContainer().toCanvas().toPdf().save();
         }
     </script>
 </body>

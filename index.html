@@ -192,6 +192,7 @@
             font-size: 18px;
             line-height: 1.5;
             max-width: 85%;
+            word-break: break-word;
         }
 
         .mensaje.usuario {
@@ -328,7 +329,7 @@
         </div>
 
         <div class="chat-body" id="chatBody">
-            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu nueva API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
+            <div class="mensaje sistema"><b>SRC:</b> ¡Hola! Ingresa tu API Key de OpenAI arriba para empezar. Escribe tu consulta contable y presiona <b>Enter</b>.</div>
         </div>
         <div class="chat-input-wrapper">
             <input type="text" id="mensaje" placeholder="Escribe aquí tu consulta y presiona Enter..." onkeypress="evaluarTecla(event)">
@@ -578,7 +579,7 @@
 
             const divUsuario = document.createElement('div');
             divUsuario.className = 'mensaje usuario';
-            divUsuario.innerHTML = `<b>Tú:</b> ${textoMensaje}`;
+            divUsuario.innerHTML = `<b>Tú:</b> ${textoMensaje.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
             chatBody.appendChild(divUsuario);
             
             inputMensaje.value = "";
@@ -602,21 +603,26 @@
                         messages: [
                             { role: "system", content: "Eres un asistente experto en contabilidad integrado en el sistema SRC de Guatemala." },
                             { role: "user", content: textoMensaje }
-                        ]
+                        ],
+                        temperature: 0.7
                     })
                 });
 
                 const datos = await respuesta.json();
 
                 if (respuesta.ok && datos.choices && datos.choices[0]) {
-                    divPensando.innerHTML = `<b>SRC:</b> ${datos.choices[0].message.content.replace(/\n/g, '<br>')}`;
+                    const textoRespuesta = datos.choices[0].message.content
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/\n/g, '<br>');
+                    divPensando.innerHTML = `<b>SRC:</b> ${textoRespuesta}`;
                 } else {
-                    const mensajeError = datos.error ? datos.error.message : 'Error desconocido en el servidor de OpenAI.';
+                    const mensajeError = datos.error ? datos.error.message : 'Error al procesar la solicitud en OpenAI.';
                     divPensando.innerHTML = `<b>SRC Error:</b> ${mensajeError}`;
                 }
             } catch (error) {
                 console.error(error);
-                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API de OpenAI. Revisa tu conexión a internet.`;
+                divPensando.innerHTML = `<b>SRC Error:</b> Hubo un problema al conectar con la API de OpenAI. Verifique su conexión o clave.`;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
         }
